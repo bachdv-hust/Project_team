@@ -87,6 +87,10 @@ public class Model {
                 System.out.println("Current turn: player " + currentPlayerIndex);
             }
             Guess guess = currentPlayer.getGuess();
+            if (guess.getListCards().isEmpty()){
+                break;
+            }
+
             if (guess.isAccusation()) {
                 boolean isEqual = true;
                 for (Card card : guess.getListCards()) {
