@@ -3,7 +3,9 @@ package com.company;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
+
 import com.company.Card.CardType;
+
 public class Model {
     private final ArrayList<Card> suspects = new ArrayList<>();
     private final ArrayList<Card> locations = new ArrayList<>();
@@ -17,16 +19,17 @@ public class Model {
         this.allCards.addAll(allCards);
         divideCardType(allCards);
     }
+
     private void divideCardType(ArrayList<Card> allCards) {
         for (Card card : allCards) {
             switch (card.getType()) {
-                case SUSPECT :
+                case SUSPECT:
                     suspects.add(card);
                     break;
-                case WEAPON :
+                case WEAPON:
                     weapons.add(card);
                     break;
-                case LOCATION :
+                case LOCATION:
                     locations.add(card);
                     break;
             }
@@ -55,6 +58,19 @@ public class Model {
         }
         shuffleCardsToPlayer();
         while (true) {
+            IPlayer currentPlayer = players.get(currentPlayerIndex);
+            if (currentPlayer instanceof HumanPlayer) {
+                if (((HumanPlayer) currentPlayer).isGameOver()) {
+                    currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+                    continue;
+                }
+            } else if (currentPlayer instanceof ComputerPlayer) {
+                if (((ComputerPlayer) currentPlayer).isGameOver()) {
+                    currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
+                    continue;
+                }
+            }
+
             turnCountNum++;
             System.out.println("------- Turn " + turnCountNum + " ---------");
 
@@ -65,21 +81,12 @@ public class Model {
             System.out.println("Here are the names of all the weapons:");
             System.out.println(weapons);
 
-            IPlayer currentPlayer = players.get(currentPlayerIndex);
             if (currentPlayer instanceof HumanPlayer) {
                 System.out.println("It's your turn");
             } else {
                 System.out.println("Current turn: player " + currentPlayerIndex);
             }
-            if (currentPlayer instanceof  HumanPlayer){
-                if (((HumanPlayer) currentPlayer).isGameOver()) {
-                    continue;
-                }
-            }else if (currentPlayer instanceof  ComputerPlayer){
-                if (((ComputerPlayer) currentPlayer).isGameOver()) {
-                    continue;
-                }
-            }
+
             Guess guess = currentPlayer.getGuess();
             if (guess.isAccusation()) {
                 boolean isEqual = true;
@@ -95,14 +102,10 @@ public class Model {
                     break;
                 } else {
                     System.out.println("Player " + currentPlayer.getIndex() + " made a bad accusation and was removed from the game.");
-                    if (currentPlayer instanceof  HumanPlayer){
-                       ((HumanPlayer) currentPlayer).setGameOver(true);
-                    }else  if ( currentPlayer instanceof  ComputerPlayer){
+                    if (currentPlayer instanceof HumanPlayer) {
+                        ((HumanPlayer) currentPlayer).setGameOver(true);
+                    } else if (currentPlayer instanceof ComputerPlayer) {
                         ((ComputerPlayer) currentPlayer).setGameOver(true);
-                    }
-                    if (players.size() == 1) {
-                        System.out.println("Game over");
-                        break;
                     }
                 }
 
@@ -124,14 +127,16 @@ public class Model {
 
             currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
 
-//            sizeSystem.out.println("players.size()" +players.size()+"--"+currentPlayerIndex);
-//            System.exit(1);
-//
-//            try {
-////                Thread.sleep(3000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
+
+            try {
+                if (currentPlayer instanceof HumanPlayer) {
+                    if (!((HumanPlayer) currentPlayer).isGameOver()) {
+                        Thread.sleep(3000);
+                    }
+                }
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

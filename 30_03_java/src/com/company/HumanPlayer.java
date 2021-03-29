@@ -44,8 +44,6 @@ public class HumanPlayer implements IPlayer {
 
     @Override
     public Guess getGuess() {
-        // TODO: 3/29/2021 validate
-
         try {
             ScannerUtils scanner = ScannerUtils.getInstance();
             ArrayList<Card> listGuess = new ArrayList<>();
@@ -69,11 +67,8 @@ public class HumanPlayer implements IPlayer {
                 isAccusation = true;
             }
 
-            Guess guess = new Guess(isAccusation, listGuess);
-
-            //scanner.close();
-            return guess;
-        } catch (NumberFormatException e) {
+            return new Guess(isAccusation, listGuess);
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
