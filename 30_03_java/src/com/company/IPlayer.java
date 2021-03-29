@@ -14,4 +14,5 @@ public interface IPlayer {
     public Guess getGuess();
 
     public void receiveInfo(IPlayer ip, Card c);
+
 }

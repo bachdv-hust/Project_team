@@ -3,9 +3,10 @@ package com.company;
 import java.util.Objects;
 
 public class Card {
-    enum CardType {
+   enum CardType {
         WEAPON, SUSPECT, LOCATION
     }
+    public boolean isMarked = false;
     private final CardType type;
     private final String value;
 
@@ -34,6 +35,7 @@ public class Card {
         Card card = (Card) o;
         return type == card.type && value.equals(card.value);
     }
+
 
     @Override
     public int hashCode() {

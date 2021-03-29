@@ -3,23 +3,32 @@ package com.company;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
-
+import com.company.Card.CardType;
 public class Model {
     private final ArrayList<Card> suspects = new ArrayList<>();
     private final ArrayList<Card> locations = new ArrayList<>();
     private final ArrayList<Card> weapons = new ArrayList<>();
-    private final ArrayList<IPlayer> players;
-    private ArrayList<Card> allCards = new ArrayList<>();
-    private ArrayList<Card> result = new ArrayList<>();
+    private final ArrayList<IPlayer> players = new ArrayList<>();
+    private final ArrayList<Card> allCards = new ArrayList<>();
+    private final ArrayList<Card> result = new ArrayList<>();
 
     public Model(ArrayList<Card> allCards, ArrayList<IPlayer> players) {
-        this.players = players;
+        this.players.addAll(players);
         this.allCards.addAll(allCards);
+        divideCardType(allCards);
+    }
+    private void divideCardType(ArrayList<Card> allCards) {
         for (Card card : allCards) {
             switch (card.getType()) {
-                case SUSPECT -> suspects.add(card);
-                case WEAPON -> weapons.add(card);
-                case LOCATION -> locations.add(card);
+                case SUSPECT :
+                    suspects.add(card);
+                    break;
+                case WEAPON :
+                    weapons.add(card);
+                    break;
+                case LOCATION :
+                    locations.add(card);
+                    break;
             }
         }
     }
@@ -30,26 +39,24 @@ public class Model {
         Card tmp = suspects.get(Math.abs(random.nextInt()) % suspects.size());
         result.add(tmp);
         this.allCards.remove(tmp);
-
         tmp = locations.get(Math.abs(random.nextInt()) % locations.size());
         result.add(tmp);
         this.allCards.remove(tmp);
-
         tmp = weapons.get(Math.abs(random.nextInt()) % weapons.size());
         result.add(tmp);
         this.allCards.remove(tmp);
 
         System.out.println(result);
 
-        int turn = 0;
-        int count = 0;
+        int currentPlayerIndex = 0;
+        int turnCountNum = 0;
         for (int i = 0; i < players.size(); i++) {
             players.get(i).setUp(players.size(), i, suspects, locations, weapons);
         }
         shuffleCardsToPlayer();
         while (true) {
-            count++;
-            System.out.println("------- Turn " + count + " ---------");
+            turnCountNum++;
+            System.out.println("------- Turn " + turnCountNum + " ---------");
 
             System.out.println("Here are the names of all the suspects:");
             System.out.println(suspects);
@@ -58,13 +65,21 @@ public class Model {
             System.out.println("Here are the names of all the weapons:");
             System.out.println(weapons);
 
-            IPlayer currentPlayer = players.get(turn);
+            IPlayer currentPlayer = players.get(currentPlayerIndex);
             if (currentPlayer instanceof HumanPlayer) {
                 System.out.println("It's your turn");
             } else {
-                System.out.println("Current turn: player " + turn);
+                System.out.println("Current turn: player " + currentPlayerIndex);
             }
-
+            if (currentPlayer instanceof  HumanPlayer){
+                if (((HumanPlayer) currentPlayer).isGameOver()) {
+                    continue;
+                }
+            }else if (currentPlayer instanceof  ComputerPlayer){
+                if (((ComputerPlayer) currentPlayer).isGameOver()) {
+                    continue;
+                }
+            }
             Guess guess = currentPlayer.getGuess();
             if (guess.isAccusation()) {
                 boolean isEqual = true;
@@ -80,7 +95,11 @@ public class Model {
                     break;
                 } else {
                     System.out.println("Player " + currentPlayer.getIndex() + " made a bad accusation and was removed from the game.");
-                    players.remove(currentPlayer);
+                    if (currentPlayer instanceof  HumanPlayer){
+                       ((HumanPlayer) currentPlayer).setGameOver(true);
+                    }else  if ( currentPlayer instanceof  ComputerPlayer){
+                        ((ComputerPlayer) currentPlayer).setGameOver(true);
+                    }
                     if (players.size() == 1) {
                         System.out.println("Game over");
                         break;
@@ -103,13 +122,16 @@ public class Model {
                 }
             }
 
-            turn = (turn + 1) % players.size();
+            currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
 
-            try {
-                Thread.sleep(3000);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
+//            sizeSystem.out.println("players.size()" +players.size()+"--"+currentPlayerIndex);
+//            System.exit(1);
+//
+//            try {
+////                Thread.sleep(3000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
         }
     }
 
