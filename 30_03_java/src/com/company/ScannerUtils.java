@@ -16,7 +16,18 @@ public class ScannerUtils {
         return instance;
     }
 
-
+    public int nextInt(Scanner scanner) {
+        if (scanner == null) {
+            scanner = new Scanner(System.in);
+        }
+        int nextInt;
+        while (!scanner.hasNextInt()) {
+            System.out.println("Enter the Number :");
+            scanner.next();
+        }
+        nextInt = scanner.nextInt();
+        return nextInt;
+    }
     public int nextInt(int from, int to) {
         if (scanner == null) {
             scanner = new Scanner(System.in);
@@ -24,7 +35,7 @@ public class ScannerUtils {
         int nextInt;
         System.out.println("Enter Int from "+from +" to " +to+" : ");
         do {
-            nextInt = scanner.nextInt();
+            nextInt = nextInt(scanner);
             if (nextInt < from || nextInt > to){
                 System.out.println("Enter again.Invalid format: ");
             }

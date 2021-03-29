@@ -16,8 +16,7 @@ public class ComputerPlayer implements IPlayer {
         isGameOver = gameOver;
     }
 
-    /// CAn quan li list ddau vao -> ham getGuess dam bao la ramdom card ma no chua co
-    private List<Card> currentCards = new ArrayList<>();
+    private final List<Card> currentCards = new ArrayList<>();
     private int index = -1;
     private final ArrayList<Card> ppl = new ArrayList<>();
     private final ArrayList<Card> places = new ArrayList<>();
@@ -85,13 +84,16 @@ public class ComputerPlayer implements IPlayer {
 
     @Override
     public void receiveInfo(IPlayer ip, Card c) {
-        if (ip != null && c != null) {
+        if (ip != null  && c != null) {
             removeCardIsPredicted(c);
         }
     }
 
     @Override
     public Card canAnswer(Guess g, IPlayer ip) {
+        if (ip.equals(this)){
+            return null;
+        }
         Card card = null;
         for (Card c : currentCards) {
             if (g.getListCards().contains(c)) {

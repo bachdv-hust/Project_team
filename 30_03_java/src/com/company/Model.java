@@ -73,10 +73,12 @@ public class Model {
             }
             if (currentPlayer instanceof  HumanPlayer){
                 if (((HumanPlayer) currentPlayer).isGameOver()) {
+                    currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
                     continue;
                 }
             }else if (currentPlayer instanceof  ComputerPlayer){
                 if (((ComputerPlayer) currentPlayer).isGameOver()) {
+                    currentPlayerIndex = (currentPlayerIndex + 1) % players.size();
                     continue;
                 }
             }

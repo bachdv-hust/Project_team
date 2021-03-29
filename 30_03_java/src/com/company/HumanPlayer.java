@@ -103,7 +103,7 @@ public class HumanPlayer implements IPlayer {
 
     @Override
     public Card canAnswer(Guess guess, IPlayer ip) {
-        if (ip == this) {
+        if (ip.equals(this)) {
             return null;
         }
         List<Card> guessCard = guess.getListCards();
