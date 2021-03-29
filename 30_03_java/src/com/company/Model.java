@@ -132,11 +132,7 @@ public class Model {
 
 
             try {
-                if (currentPlayer instanceof HumanPlayer) {
-                    if (!((HumanPlayer) currentPlayer).isGameOver()) {
-                        Thread.sleep(3000);
-                    }
-                }
+                Thread.sleep(1000);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
