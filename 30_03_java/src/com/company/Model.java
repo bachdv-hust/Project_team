@@ -101,7 +101,7 @@ public class Model {
                 }
 
                 if (isEqual) {
-                    System.out.println("Player " + currentPlayer.getIndex() + "won the game.");
+                    System.out.println("Player " + currentPlayer.getIndex() + " won the game.");
                     break;
                 } else {
                     System.out.println("Player " + currentPlayer.getIndex() + " made a bad accusation and was removed from the game.");

@@ -125,4 +125,34 @@ public class HumanPlayer implements IPlayer {
                 return cardContained.get(index);
         }
     }
+
+    // test automatic choose (not require input from user)
+    public Card canAnswerTest(Guess guess, IPlayer ip) {
+        if (ip.equals(this)) {
+            return null;
+        }
+        List<Card> guessCard = guess.getListCards();
+        List<Card> cardContained = new ArrayList<>();
+        for (Card c : guessCard) {
+            if (currentCards.contains(c)) {
+                cardContained.add(c);
+            }
+        }
+
+        switch (cardContained.size()) {
+            case 0:
+                System.out.println("Player " + ip.getIndex() + " asked you about " + guess + ", but you couldn't answer.");
+                return null;
+
+            case 1:
+                System.out.println("Player " + ip.getIndex() + " asked you about " + guess + " ,you only have one card," + cardContained.get(0) + ", showed it to them.");
+                return cardContained.get(0);
+
+            default:
+                ScannerUtils scanner = ScannerUtils.getInstance();
+                System.out.println("Player " + ip.getIndex() + " asked you about " + guess + " .Which do you show?" + cardContained);
+                //int index = scanner.nextInt(0, cardContained.size()-1);
+                return cardContained.get(0);
+        }
+    }
 }

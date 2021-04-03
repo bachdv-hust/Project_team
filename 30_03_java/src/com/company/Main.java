@@ -11,6 +11,7 @@ public class Main {
         players.add(new ComputerPlayer());
         players.add(new ComputerPlayer());
         players.add(new ComputerPlayer());
+        players.add(new ComputerPlayer());
 
         ArrayList<Card> originalCards = initOriginalCards();
         Model model = new Model(originalCards, players);
